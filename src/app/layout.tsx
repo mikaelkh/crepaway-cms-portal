@@ -3,6 +3,7 @@ import "./globals.css";
 import { Poppins } from "next/font/google";
 import { cn } from "@/lib/utils";
 import SessionProvider from "@/providers/SessionProvider";
+import { Toaster } from "@/components/ui/sonner";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -30,6 +31,7 @@ export default function RootLayout({
         )}
       >
         <SessionProvider>{children}</SessionProvider>
+        <Toaster position="top-right" richColors closeButton />
       </body>
     </html>
   );
