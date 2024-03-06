@@ -1,3 +1,4 @@
+import Sidebar from "@/components/sidebar/Sidebar";
 import Image from "next/image";
 
 export default function RootLayout({
@@ -6,8 +7,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between">
-      {children}
-    </main>
+    <div className="flex min-h-screen w-full">
+      <Sidebar />
+      <main className="flex h-full flex-col items-center justify-between">
+        {children}
+      </main>
+    </div>
   );
 }
