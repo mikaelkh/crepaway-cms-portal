@@ -1,0 +1,49 @@
+[
+  {
+    "label": "Dashboard",
+    "link": "/",
+    "children": []
+  },
+  {
+    "label": "Menu",
+    "link": "/menu",
+    "children": [
+      {
+        "label": "Add Product",
+        "link": "/products/add"
+      },
+      {
+        "label": "View Products",
+        "link": "/products/view"
+      }
+    ]
+  },
+  {
+    "label": "Orders",
+    "link": "/orders",
+    "children": [
+      {
+        "label": "Pending Orders",
+        "link": "/orders/pending"
+      },
+      {
+        "label": "Completed Orders",
+        "link": "/orders/completed"
+      }
+    ]
+  },
+  {
+    "label": "Settings",
+    "link": "/settings",
+    "children": [
+      {
+        "label": "General Settings",
+        "link": "/settings/general"
+      },
+      {
+        "label": "Account Settings",
+        "link": "/settings/account"
+      }
+    ]
+  }
+]

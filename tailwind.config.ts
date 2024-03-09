@@ -7,6 +7,7 @@ const config = {
     "./components/**/*.{ts,tsx}",
     "./app/**/*.{ts,tsx}",
     "./src/**/*.{ts,tsx}",
+    "./node_modules/react-tailwindcss-datepicker/dist/index.esm.js",
   ],
   prefix: "",
   theme: {
@@ -22,6 +23,7 @@ const config = {
         poppins: ["var(--font-poppins)"],
       },
       colors: {
+        "red-primary": "#DB0032",
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
@@ -77,6 +79,7 @@ const config = {
       },
     },
   },
+
   plugins: [require("tailwindcss-animate")],
 } satisfies Config;
 

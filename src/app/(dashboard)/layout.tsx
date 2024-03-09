@@ -1,5 +1,4 @@
-import Sidebar from "@/components/sidebar/Sidebar";
-import Image from "next/image";
+import NavigationBar from "@/components/navigation/NavigationBar";
 
 export default function RootLayout({
   children,
@@ -7,9 +6,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="flex min-h-screen w-full">
-      <Sidebar />
-      <main className="flex h-full flex-col items-center justify-between">
+    <div className="flex flex-col min-h-screen w-full">
+      <NavigationBar />
+      <main className="flex h-full flex-col items-center justify-between py-10">
         {children}
       </main>
     </div>
