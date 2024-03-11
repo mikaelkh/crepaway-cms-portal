@@ -1,20 +1,10 @@
 "use client";
 import Container from "@/components/Container";
 import MultiSelect from "@/components/MultiSelect";
-import Select from "@/components/Select";
 import Title from "@/components/Title";
-import LineChart from "@/components/charts/LineChart";
 import ChartCard from "@/components/dashboard/ChartCard";
 import StatisticsCard from "@/components/dashboard/StatisticsCard";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import Image from "next/image";
+
 import { useEffect, useState } from "react";
 import { MultiValue, SingleValue } from "react-select";
 import Datepicker, { DateValueType } from "react-tailwindcss-datepicker";
@@ -53,7 +43,6 @@ export default function Home() {
     startDate: null,
     endDate: null,
   });
-  console.log(date);
 
   const handleValueChange = (newValue: DateValueType) => {
     setDate(newValue);
