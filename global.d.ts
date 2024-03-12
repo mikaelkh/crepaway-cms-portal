@@ -17,3 +17,8 @@ type TableColumn = {
   sortable: boolean;
   Cell?: ({ value: string }) => React.ReactNode;
 };
+
+type SortingState = {
+  key: string;
+  order: string;
+};
