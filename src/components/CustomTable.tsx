@@ -18,15 +18,26 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Dispatch, useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
 
 type Props<T> = {
   table: import("@tanstack/table-core").Table<T>;
   columns: ColumnDef<T>[];
   sorting: SortingState;
   filter: string;
-  setFilter: Dispatch<string>;
-  setSorting: Dispatch<SortingState>;
+  pagination: PaginationState;
+  setFilter: Dispatch<SetStateAction<string>>;
+  setSorting: Dispatch<SetStateAction<SortingState>>;
+  setPagination: Dispatch<SetStateAction<PaginationState>>;
 };
 
 const CustomTable = <T,>({
@@ -36,6 +47,8 @@ const CustomTable = <T,>({
   filter,
   setFilter,
   setSorting,
+  pagination,
+  setPagination,
 }: Props<T>) => {
   return (
     <div className="w-full">
@@ -151,32 +164,139 @@ const CustomTable = <T,>({
           </TableBody>
         </Table>
       </div>
-      <div className="flex items-center justify-end space-x-2 py-4">
-        <div className="flex-1 text-sm text-muted-foreground">
-          {table.getFilteredSelectedRowModel().rows.length} of{" "}
-          {table.getFilteredRowModel().rows.length} row(s) selected.
-        </div>
-        <div className="space-x-2">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => table.previousPage()}
-            disabled={!table.getCanPreviousPage()}
-          >
-            Previous
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => table.nextPage()}
-            disabled={!table.getCanNextPage()}
-          >
-            Next
-          </Button>
-        </div>
-      </div>
+      <CustomPagination setPagination={setPagination} pagination={pagination} />
     </div>
   );
 };
 
 export default CustomTable;
+
+const CustomPagination = ({
+  pagination,
+  setPagination,
+}: {
+  setPagination: Dispatch<SetStateAction<PaginationState>>;
+  pagination: PaginationState;
+}) => {
+  const renderPaginationLinks = () => {
+    const totalPages = pagination.total;
+    const currentPage = pagination.currentPage;
+    const maxVisiblePages = 5; // Number of pages to show at a time
+
+    const pages = [];
+
+    // If there are less than or equal to maxVisiblePages total pages,
+    // simply render all pages
+    if (totalPages <= maxVisiblePages) {
+      for (let i = 1; i <= totalPages; i++) {
+        pages.push(
+          <PaginationItem key={i} className="select-none cursor-pointer">
+            <PaginationLink
+              onClick={() => setPagination({ ...pagination, currentPage: i })}
+              isActive={currentPage === i}
+            >
+              {i}
+            </PaginationLink>
+          </PaginationItem>
+        );
+      }
+    } else {
+      // Calculate the range of pages to display around the current page
+      const rangeStart = Math.max(
+        1,
+        currentPage - Math.floor(maxVisiblePages / 2)
+      );
+      const rangeEnd = Math.min(totalPages, rangeStart + maxVisiblePages - 1);
+
+      // Render first page and ellipsis if needed
+      if (rangeStart > 1) {
+        pages.push(
+          <PaginationItem key={1} className="select-none cursor-pointer">
+            <PaginationLink
+              onClick={() => setPagination({ ...pagination, currentPage: 1 })}
+              isActive={currentPage === 1}
+            >
+              1
+            </PaginationLink>
+          </PaginationItem>
+        );
+        pages.push(
+          <PaginationItem key="ellipsis-start">
+            <PaginationEllipsis />
+          </PaginationItem>
+        );
+      }
+
+      // Render pages within the range
+      for (let i = rangeStart; i <= rangeEnd; i++) {
+        pages.push(
+          <PaginationItem key={i} className="select-none cursor-pointer">
+            <PaginationLink
+              onClick={() => setPagination({ ...pagination, currentPage: i })}
+              isActive={currentPage === i}
+            >
+              {i}
+            </PaginationLink>
+          </PaginationItem>
+        );
+      }
+
+      // Render last page and ellipsis if needed
+      if (rangeEnd < totalPages) {
+        pages.push(
+          <PaginationItem key="ellipsis-end">
+            <PaginationEllipsis />
+          </PaginationItem>
+        );
+        pages.push(
+          <PaginationItem
+            key={totalPages}
+            className="select-none cursor-pointer"
+          >
+            <PaginationLink
+              onClick={() =>
+                setPagination({ ...pagination, currentPage: totalPages })
+              }
+              isActive={currentPage === totalPages}
+            >
+              {totalPages}
+            </PaginationLink>
+          </PaginationItem>
+        );
+      }
+    }
+
+    return pages;
+  };
+
+  return (
+    <Pagination className="py-4">
+      <PaginationContent>
+        <PaginationItem className="select-none cursor-pointer">
+          <PaginationPrevious
+            onClick={() => {
+              if (pagination.currentPage !== 1)
+                setPagination((prev) => ({
+                  ...prev,
+                  currentPage: prev.currentPage - 1,
+                }));
+            }}
+          />
+        </PaginationItem>
+        {renderPaginationLinks()}
+        <PaginationItem>
+          <PaginationNext
+            className="select-none cursor-pointer"
+            onClick={() => {
+              if (pagination.currentPage !== pagination.total)
+                setPagination((prev) => ({
+                  ...prev,
+                  currentPage: prev.currentPage + 1,
+                }));
+            }}
+          />
+        </PaginationItem>
+      </PaginationContent>
+    </Pagination>
+  );
+};

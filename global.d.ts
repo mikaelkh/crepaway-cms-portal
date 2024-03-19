@@ -22,3 +22,19 @@ type SortingState = {
   key: string;
   order: string;
 };
+
+type PaginationState = {
+  total: number;
+  currentPage: number;
+  showPerPage: number;
+};
+
+type Item = {
+  id: number;
+  name: string;
+  image_url: string;
+  type: "item" | "modifier";
+  source: string;
+  price: number;
+  created_at: Date;
+};
