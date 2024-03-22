@@ -58,6 +58,8 @@ export default function Page() {
 
   const table = useReactTable({
     data,
+
+    
     columns,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
@@ -75,10 +77,10 @@ export default function Page() {
       columns={columns}
       filter={columnFilter}
       setFilter={setColumnFilter}
-      setSorting={setSorting}
       sorting={sorting}
-      setPagination={setPagination}
+      setSorting={setSorting}
       pagination={pagination}
+      setPagination={setPagination}
     />
   );
 }
