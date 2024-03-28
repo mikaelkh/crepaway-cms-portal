@@ -177,91 +177,62 @@ const CustomPagination = ({
   setPagination: Dispatch<SetStateAction<PaginationState>>;
   pagination: PaginationState;
 }) => {
-  const renderPaginationLinks = () => {
-    const totalPages = pagination.total;
-    const currentPage = pagination.currentPage;
-    const maxVisiblePages = 5; // Number of pages to show at a time
+  const totalPages = pagination.total;
+  const currentPage = pagination.currentPage;
+  const maxVisiblePages = 5;
 
+  const renderPageLink = (pageNumber: number) => (
+    <PaginationItem key={pageNumber} className="select-none cursor-pointer">
+      <PaginationLink
+        onClick={() =>
+          setPagination({ ...pagination, currentPage: pageNumber })
+        }
+        isActive={currentPage === pageNumber}
+      >
+        {pageNumber}
+      </PaginationLink>
+    </PaginationItem>
+  );
+
+  const renderPaginationLinks = () => {
     const pages = [];
 
-    // If there are less than or equal to maxVisiblePages total pages,
-    // simply render all pages
     if (totalPages <= maxVisiblePages) {
       for (let i = 1; i <= totalPages; i++) {
-        pages.push(
-          <PaginationItem key={i} className="select-none cursor-pointer">
-            <PaginationLink
-              onClick={() => setPagination({ ...pagination, currentPage: i })}
-              isActive={currentPage === i}
-            >
-              {i}
-            </PaginationLink>
-          </PaginationItem>
-        );
+        pages.push(renderPageLink(i));
       }
     } else {
-      // Calculate the range of pages to display around the current page
-      const rangeStart = Math.max(
+      const start = Math.max(
         1,
-        currentPage - Math.floor(maxVisiblePages / 2)
+        Math.min(
+          currentPage - Math.floor(maxVisiblePages / 2),
+          totalPages - maxVisiblePages + 1
+        )
       );
-      const rangeEnd = Math.min(totalPages, rangeStart + maxVisiblePages - 1);
+      const end = Math.min(totalPages, start + maxVisiblePages - 1);
 
-      // Render first page and ellipsis if needed
-      if (rangeStart > 1) {
-        pages.push(
-          <PaginationItem key={1} className="select-none cursor-pointer">
-            <PaginationLink
-              onClick={() => setPagination({ ...pagination, currentPage: 1 })}
-              isActive={currentPage === 1}
-            >
-              1
-            </PaginationLink>
-          </PaginationItem>
-        );
-        pages.push(
-          <PaginationItem key="ellipsis-start">
-            <PaginationEllipsis />
-          </PaginationItem>
-        );
+      if (start > 1) {
+        pages.push(renderPageLink(1));
+        if (start > 2)
+          pages.push(
+            <PaginationItem key="ellipsis-start">
+              <PaginationEllipsis />
+            </PaginationItem>
+          );
       }
 
-      // Render pages within the range
-      for (let i = rangeStart; i <= rangeEnd; i++) {
-        pages.push(
-          <PaginationItem key={i} className="select-none cursor-pointer">
-            <PaginationLink
-              onClick={() => setPagination({ ...pagination, currentPage: i })}
-              isActive={currentPage === i}
-            >
-              {i}
-            </PaginationLink>
-          </PaginationItem>
-        );
+      for (let i = start; i <= end; i++) {
+        pages.push(renderPageLink(i));
       }
 
-      // Render last page and ellipsis if needed
-      if (rangeEnd < totalPages) {
-        pages.push(
-          <PaginationItem key="ellipsis-end">
-            <PaginationEllipsis />
-          </PaginationItem>
-        );
-        pages.push(
-          <PaginationItem
-            key={totalPages}
-            className="select-none cursor-pointer"
-          >
-            <PaginationLink
-              onClick={() =>
-                setPagination({ ...pagination, currentPage: totalPages })
-              }
-              isActive={currentPage === totalPages}
-            >
-              {totalPages}
-            </PaginationLink>
-          </PaginationItem>
-        );
+      if (end < totalPages) {
+        if (end < totalPages - 1)
+          pages.push(
+            <PaginationItem key="ellipsis-end">
+              <PaginationEllipsis />
+            </PaginationItem>
+          );
+        pages.push(renderPageLink(totalPages));
       }
     }
 
@@ -273,26 +244,26 @@ const CustomPagination = ({
       <PaginationContent>
         <PaginationItem className="select-none cursor-pointer">
           <PaginationPrevious
-            onClick={() => {
-              if (pagination.currentPage !== 1)
-                setPagination((prev) => ({
-                  ...prev,
-                  currentPage: prev.currentPage - 1,
-                }));
-            }}
+            onClick={() =>
+              pagination.currentPage !== 1 &&
+              setPagination((prev) => ({
+                ...prev,
+                currentPage: prev.currentPage - 1,
+              }))
+            }
           />
         </PaginationItem>
         {renderPaginationLinks()}
         <PaginationItem>
           <PaginationNext
             className="select-none cursor-pointer"
-            onClick={() => {
-              if (pagination.currentPage !== pagination.total)
-                setPagination((prev) => ({
-                  ...prev,
-                  currentPage: prev.currentPage + 1,
-                }));
-            }}
+            onClick={() =>
+              pagination.currentPage !== totalPages &&
+              setPagination((prev) => ({
+                ...prev,
+                currentPage: prev.currentPage + 1,
+              }))
+            }
           />
         </PaginationItem>
       </PaginationContent>
