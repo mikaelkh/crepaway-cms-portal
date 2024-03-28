@@ -239,6 +239,9 @@ const InputComponent = ({
           </SelectContent>
         </Select>
       );
+    case "custom":
+      if (!inp.Component) return;
+      return <inp.Component changeHandle={field.onChange} />;
   }
 };
 

@@ -17,6 +17,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { useRef } from "react";
 
 export default function Home() {
   const formSchema = z.object({
@@ -113,6 +114,13 @@ export default function Home() {
       name: "datepi",
       label: "Add date",
       placeholder: "Select a date",
+    },
+    {
+      type: "custom",
+      name: "custom",
+      Component: ({ changeHandle }: { changeHandle: (value: any) => void }) => {
+        return <div onClick={() => changeHandle(new Date())}>Click me</div>;
+      },
     },
   ];
 

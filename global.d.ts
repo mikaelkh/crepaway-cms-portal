@@ -118,6 +118,11 @@ type FormInput =
   | SelectFormInput
   | CheckboxFormInput
   | FileFormInput
+  | (FormInputBase & {
+      type: "custom";
+      defaultValue?: any;
+      Component: (props: { changeHandle: (value: any) => void }) => JSX.Element;
+    })
   | { type: "seperator" };
 
 type LabelOption<T> = {
