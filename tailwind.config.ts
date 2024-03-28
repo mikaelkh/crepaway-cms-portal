@@ -79,7 +79,12 @@ const config = {
       },
     },
   },
-
+  safelist: [
+    {
+      pattern: /col-span-[1-9]{1,2}/,
+      variants: ["sm", "md", "lg", "xl"],
+    },
+  ],
   plugins: [require("tailwindcss-animate")],
 } satisfies Config;
 

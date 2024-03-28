@@ -26,8 +26,9 @@ const ChartCard = (props: Props) => {
       <CardHeader>
         <CardTitle>{props.title}</CardTitle>
         <div className="flex items-center justify-end">
-          {props.filterOptions.map((option) => (
+          {props.filterOptions.map((option, idx) => (
             <ToggleItem
+              key={idx}
               onClick={() => setFilter(option.value)}
               selected={filter === option.value}
             >

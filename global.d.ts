@@ -51,45 +51,73 @@ type Item = {
 
 type FormInputBase = {
   name: string;
-  label: string;
+  label?: string;
   grid?: GridSpan;
 };
 
 // to add type file
 type SelectFormInput = FormInputBase & {
-  type: "select" | "multi-select";
+  //  TODO add multi-select
+  type: "select";
   placeholder: string;
   data: LabelOption<T>[];
-  defaultValue: { label: string; value: T };
+  defaultValue?: T;
   content?: "between" | "around" | "center" | "end";
 };
 
-type RadioCheckFormInput = FormInputBase & {
-  type: "radio-group" | "checkbox-group";
-  data: LabelOption<string>[];
-  defaultValue: string;
+type GroupRadioFormInput = FormInputBase & {
+  type: "radio-group";
+  data: LabelOption<T>[];
+  defaultValue?: T;
   content?: "between" | "around" | "center" | "end";
-  radioDirection?: "row" | "col";
+  direction?: "row" | "col";
+};
+
+type GroupCheckFormInput = FormInputBase & {
+  type: "checkbox-group";
+  data: LabelOption<T>[];
+  defaultValue?: T[];
+  content?: "between" | "around" | "center" | "end";
+  direction?: "row" | "col";
+};
+
+type CheckboxFormInput = FormInputBase & {
+  type: "checkbox";
+  description?: string;
+  defaultValue?: 1 | 0;
 };
 
 type TextareaFormInput = FormInputBase & {
   type: "textarea";
-  defaultValue: string;
+  defaultValue?: string;
   placeholder: string;
   rows?: number;
   cols?: number;
 };
 
+type FileFormInput = FormInputBase & {
+  type: "file";
+  accept?: string;
+};
+
 type FormInput =
   | (FormInputBase & {
-      type: "text" | "password" | "number" | "email";
-      defaultValue: string | number;
+      type:
+        | "text"
+        | "password"
+        | "number"
+        | "email"
+        | "datetime-local"
+        | "date";
+      defaultValue?: string | number;
       placeholder: string;
     })
-  | FormInputWithData
   | TextareaFormInput
-  | RadioCheckFormInput
+  | GroupCheckFormInput
+  | GroupRadioFormInput
   | SelectFormInput
+  | CheckboxFormInput
+  | FileFormInput
   | { type: "seperator" };
 
 type LabelOption<T> = {
